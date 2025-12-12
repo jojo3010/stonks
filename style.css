@@ -1,0 +1,42 @@
+body {
+  font-family: "Microsoft JhengHei", sans-serif;
+  background: #fafafa;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  max-width: 680px;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+input {
+  width: 60%;
+  padding: 10px;
+  font-size: 16px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+#sentiment {
+  margin-top: 10px;
+  padding: 10px;
+  background: #eee;
+  border-radius: 8px;
+}
+
+#explain {
+  background: #f4f4f4;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
