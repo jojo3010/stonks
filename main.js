@@ -72,22 +72,22 @@ function drawChart(labels, prices) {
 // 真實新聞情緒（Finnhub）
 // ===============================
 async function loadSentiment(symbol) {
-  try {
-    const res = await fetch(`${API_BASE}/sentiment/${symbol}`);
-    if (!res.ok) throw new Error("No sentiment");
+  const res = await fetch(`${API_BASE}/sentiment/${symbol}`);
+  const data = await res.json();
 
-    const data = await res.json();
-
-    document.getElementById("sentiment").innerHTML = `
-      看多比例：${data.bullishPercent ?? "N/A"}<br>
-      看空比例：${data.bearishPercent ?? "N/A"}<br>
-      新聞分數：${data.companyNewsScore ?? "N/A"}
-    `;
-  } catch {
+  if (!data.available) {
     document.getElementById("sentiment").innerHTML =
-      "無法取得新聞情緒資料";
+      "新聞情緒資料目前無法取得";
+    return;
   }
+
+  document.getElementById("sentiment").innerHTML = `
+    看多比例：${data.bullishPercent ?? "N/A"}<br>
+    看空比例：${data.bearishPercent ?? "N/A"}<br>
+    新聞分數：${data.companyNewsScore ?? "N/A"}
+  `;
 }
+
 
 // ===============================
 // 白話解讀
@@ -101,3 +101,4 @@ function renderExplain(prices) {
 
   document.getElementById("explain").innerHTML =
     `近期價格走勢呈現 <b>${trend}</b>，新聞情緒可作為市場氛圍
+
