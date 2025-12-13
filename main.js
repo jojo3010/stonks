@@ -5,38 +5,49 @@ let chart = null;
 const API_BASE = "https://stonks-backend-pnai.onrender.com";
 
 // ===============================
-// 主功能：使用者按「開始分析」
+// 主功能
 // ===============================
 function analyze() {
-  const stock = document.getElementById("stockInput").value.trim();
+  const stock = document.getElementById("stockInput").value.trim().toUpperCase();
   if (!stock) return alert("請輸入股票代號");
 
   localStorage.setItem("preferredStock", stock);
 
-  loadRealStock(stock);      // 真實股價 + 圖表
-  loadSentiment(stock);      // 真實新聞情緒
+  loadRealStock(stock);
+  loadSentiment(stock);
 }
 
 // ===============================
 // 真實股票資料（Yahoo Finance）
 // ===============================
 async function loadRealStock(symbol) {
-  const res = await fetch(`${API_BASE}/price/${symbol}`);
-  const data = await res.json();
+  try {
+    const res = await fetch(`${API_BASE}/price/${symbol}`);
+    if (!res.ok) throw new Error("Invalid symbol");
 
-  const labels = data.date;
-  const prices = data.close;
+    const data = await res.json();
+    const labels = data.date;
+    const prices = data.close;
 
-  // 顯示最新收盤價
-  document.getElementById("price").innerText =
-    `${symbol} 最新收盤價：${prices[prices.length - 1]}`;
+    document.getElementById("price").innerText =
+      `${symbol} 最新收盤價：${prices[prices.length - 1]}`;
 
-  drawChart(labels, prices);
-  renderExplain(prices);
+    drawChart(labels, prices);
+    renderExplain(prices);
+
+  } catch (err) {
+    document.getElementById("price").innerText =
+      "找不到該股票代碼，請重新輸入";
+
+    document.getElementById("sentiment").innerHTML = "";
+    document.getElementById("explain").innerHTML = "";
+
+    if (chart) chart.destroy();
+  }
 }
 
 // ===============================
-// Chart.js 繪圖（真實歷史股價）
+// Chart.js（真實歷史股價）
 // ===============================
 function drawChart(labels, prices) {
   const ctx = document.getElementById("priceChart");
@@ -48,7 +59,7 @@ function drawChart(labels, prices) {
     data: {
       labels: labels,
       datasets: [{
-        label: "歷史收盤價（Yahoo Finance）",
+        label: "歷史收盤價",
         data: prices,
         borderWidth: 2,
         tension: 0.25
@@ -61,18 +72,25 @@ function drawChart(labels, prices) {
 // 真實新聞情緒（Finnhub）
 // ===============================
 async function loadSentiment(symbol) {
-  const res = await fetch(`${API_BASE}/sentiment/${symbol}`);
-  const data = await res.json();
+  try {
+    const res = await fetch(`${API_BASE}/sentiment/${symbol}`);
+    if (!res.ok) throw new Error("No sentiment");
 
-  document.getElementById("sentiment").innerHTML = `
-    看多比例：${data.bullishPercent ?? "N/A"}<br>
-    看空比例：${data.bearishPercent ?? "N/A"}<br>
-    新聞分數：${data.companyNewsScore ?? "N/A"}
-  `;
+    const data = await res.json();
+
+    document.getElementById("sentiment").innerHTML = `
+      看多比例：${data.bullishPercent ?? "N/A"}<br>
+      看空比例：${data.bearishPercent ?? "N/A"}<br>
+      新聞分數：${data.companyNewsScore ?? "N/A"}
+    `;
+  } catch {
+    document.getElementById("sentiment").innerHTML =
+      "無法取得新聞情緒資料";
+  }
 }
 
 // ===============================
-// 白話解讀（依真實價格）
+// 白話解讀
 // ===============================
 function renderExplain(prices) {
   if (prices.length < 2) return;
@@ -82,15 +100,4 @@ function renderExplain(prices) {
   const trend = last > before ? "略為上行" : "稍微下降";
 
   document.getElementById("explain").innerHTML =
-    `近期價格走勢呈現 <b>${trend}</b>，新聞情緒可作為市場氛圍參考。本工具僅供學習與分析展示，不提供任何下單建議。`;
-}
-
-// ===============================
-// 初始化：頁面載入即顯示
-// ===============================
-window.onload = () => {
-  const saved = localStorage.getItem("preferredStock") || "AAPL";
-  document.getElementById("stockInput").value = saved;
-  loadRealStock(saved);
-  loadSentiment(saved);
-};
+    `近期價格走勢呈現 <b>${trend}</b>，新聞情緒可作為市場氛圍
