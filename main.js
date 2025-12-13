@@ -72,3 +72,16 @@ window.onload = () => {
   const saved = localStorage.getItem("preferredStock");
   if (saved) document.getElementById("stockInput").value = saved;
 };
+async function loadStock(symbol) {
+  const res = await fetch(
+    "https://stonks-backend-pnai.onrender.com/price/" + symbol
+  );
+  const data = await res.json();
+
+  document.getElementById("price").innerText =
+    symbol + " 最新收盤價：" + data.close[data.close.length - 1];
+}
+
+// 頁面載入自動抓 AAPL
+loadStock("AAPL");
+
