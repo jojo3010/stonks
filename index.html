@@ -6,12 +6,15 @@
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
   <div class="container">
     <h1>Stonks 分析助手</h1>
 
     <input id="stockInput" placeholder="輸入股票代號 (例：AAPL)">
     <button onclick="analyze()">開始分析</button>
+
+    <h2 id="price">載入中...</h2>
 
     <h2>價格走勢預測（假資料）</h2>
     <canvas id="priceChart"></canvas>
