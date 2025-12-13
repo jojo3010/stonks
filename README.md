@@ -1,4 +1,3 @@
-# stonks
 # Stonks — 新手投資分析助手
 
 Stonks 是一個為金融與程式新手設計的 Web 投資分析展示系統，  
