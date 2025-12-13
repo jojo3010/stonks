@@ -11,22 +11,27 @@
   <div class="container">
     <h1>Stonks 分析助手</h1>
 
-    <input id="stockInput" type="text" placeholder="輸入股票代號 (例：AAPL)">
-    <button onclick="analyze()">開始分析</button>
+    <div class="input-row">
+      <input
+        id="stockInput"
+        type="text"
+        placeholder="輸入股票代號（例：AAPL）"
+      >
+      <button onclick="analyze()">開始分析</button>
+    </div>
 
-    <h2 id="price">載入中...</h2>
+    <h2 id="price">請輸入股票代號</h2>
 
-    <h2>價格走勢預測（假資料）</h2>
+    <h2>歷史價格走勢（Yahoo Finance）</h2>
     <canvas id="priceChart"></canvas>
 
-    <h2>新聞情緒分析（假資料）</h2>
-    <div id="sentiment"></div>
+    <h2>新聞情緒分析（Finnhub）</h2>
+    <div id="sentiment" class="card"></div>
 
     <h2>白話解讀</h2>
-    <div id="explain"></div>
+    <div id="explain" class="card"></div>
   </div>
 
   <script src="main.js"></script>
 </body>
 </html>
-
