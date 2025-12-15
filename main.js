@@ -105,6 +105,20 @@ async function loadSentiment(symbol) {
       "新聞情緒資料目前無法取得";
   }
 }
+// async function loadSentiment(symbol) {
+//   // 假資料（每次呼叫會有小變化，Demo 好看）
+//   const mockData = {
+//     bullishPercent: Math.floor(Math.random() * 30) + 50, // 50–79%
+//     bearishPercent: Math.floor(Math.random() * 20) + 10, // 10–29%
+//     companyNewsScore: (Math.random() * 0.6 - 0.3).toFixed(2)
+//   };
+
+//   document.getElementById("sentiment").innerHTML =
+//     `看多比例：${mockData.bullishPercent}%（模擬）<br>` +
+//     `看空比例：${mockData.bearishPercent}%（模擬）<br>` +
+//     `新聞分數：${mockData.companyNewsScore}（模擬）`;
+// }
+
 
 // ===============================
 // 白話解讀
@@ -133,3 +147,4 @@ window.onload = () => {
   loadRealStock(saved);
   loadSentiment(saved);
 };
+
