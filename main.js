@@ -140,11 +140,19 @@ function renderExplain(prices) {
 // 初始化
 // ===============================
 window.onload = () => {
-  const saved = localStorage.getItem("preferredStock") || "AAPL";
-  const input = document.getElementById("stockInput");
-  if (input) input.value = saved;
+  localStorage.removeItem("preferredStock");
 
-  loadRealStock(saved);
-  loadSentiment(saved);
+  const input = document.getElementById("stockInput");
+  if (input) input.value = "";
+
+  document.getElementById("price").innerText = "請輸入股票代號";
+  document.getElementById("sentiment").innerHTML = "";
+  document.getElementById("explain").innerHTML = "";
+
+  if (chart) {
+    chart.destroy();
+    chart = null;
+  }
 };
+
 
